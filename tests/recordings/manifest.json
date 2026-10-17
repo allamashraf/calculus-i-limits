@@ -1,0 +1,25 @@
+{
+  "about": "Real camera recordings from the Gesture Lab. 'calibration' recordings may be used to choose thresholds; 'validation' recordings are only ever used to measure them. Add each new capture here with its role.",
+  "recordings": [
+    {
+      "file": "1m/2026-10-16_2241.json",
+      "distance": 1,
+      "role": "calibration",
+      "note": "First 5 s-window run. During the FIST window the hand passed through OK-sign, point and open before closing (reaction 2.8 s) — label-based errors there reflect the hand, not the classifier."
+    },
+    {
+      "file": "1m/2026-10-16_2244.json",
+      "distance": 1,
+      "role": "validation",
+      "note": "Clean run. Not used to choose the v3.1 index-reach bounds."
+    }
+  ],
+  "calibrationSummaries": [
+    {
+      "source": "fresh 1 m run after PINCH v3 (per-frame data not saved; values quoted by the user)",
+      "pinchIndexReach": { "p10": 1.46, "p50": 1.55, "p90": 1.59 },
+      "openIndexReachP10": 1.74,
+      "pointIndexReachP10": 1.76
+    }
+  ]
+}

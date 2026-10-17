@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Limits — An Interactive Exhibit · Calculus I</title>
+<meta name="description" content="An interactive exhibit about limits for Calculus I, by Allam Ashraf Mohamed (23-101021). Student academic project — not an official EUI webpage.">
+<meta name="author" content="Allam Ashraf Mohamed">
+<meta name="color-scheme" content="light">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="vendor/katex/katex.min.css">
+<link rel="stylesheet" href="css/exhibit.css">
+<script>document.documentElement.className = 'js';</script>
+<script defer src="vendor/katex/katex.min.js"></script>
+<script defer src="js/core.js"></script>
+<script defer src="js/opening.js"></script>
+<script defer src="js/ch1-limit.js"></script>
+<script defer src="js/ch2-hole.js"></script>
+<script defer src="js/ch3-applications.js"></script>
+<script defer src="js/ch4-computing.js"></script>
+<script defer src="js/ch5-laws.js"></script>
+<script defer src="js/ch6-advanced.js"></script>
+<script defer src="js/presentation.js"></script>
+</head>
+<body>
+
+<a class="skip" href="#ch1">Skip to Chapter 01</a>
+
+<!-- Slim bar that appears once the opening has scrolled away -->
+<header class="topbar" data-topbar>
+  <div class="topbar__inner">
+    <a class="topbar__brand" href="#top" aria-label="Back to the opening">
+      <svg class="glyph" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h6M22 5h6"/><circle class="glyph__o" cx="14" cy="5" r="3.2"/><circle class="glyph__p" cx="8.2" cy="5" r="1.7"/><circle class="glyph__p" cx="19.8" cy="5" r="1.7"/></svg>
+      <span class="topbar__word">Limits</span>
+      <span class="topbar__course">Calculus I</span>
+    </a>
+    <p class="topbar__chapter" data-topbar-chapter aria-hidden="true"></p>
+    <button class="btn-present" type="button" data-present aria-pressed="false" title="Presentation mode (P)">
+      <span>Present</span><kbd>P</kbd>
+    </button>
+  </div>
+</header>
+
+<!-- Chapter rail: a vertical number line; the marker approaches the chapter you are reading -->
+<nav class="rail" aria-label="Chapters" data-rail>
+  <ol class="rail__list">
+    <li><a href="#ch1"><span class="rail__num">01</span><span class="rail__label">What is a limit?</span></a></li>
+    <li><a href="#ch2"><span class="rail__num">02</span><span class="rail__label">The hole</span></a></li>
+    <li><a href="#ch3"><span class="rail__num">03</span><span class="rail__label">Why limits matter</span></a></li>
+    <li><a href="#ch4"><span class="rail__num">04</span><span class="rail__label">Computer science</span></a></li>
+    <li><a href="#ch5"><span class="rail__num">05</span><span class="rail__label">Limit laws</span></a></li>
+    <li><a href="#ch6"><span class="rail__num">06</span><span class="rail__label">Advanced</span></a></li>
+  </ol>
+  <span class="rail__marker" data-rail-marker aria-hidden="true"></span>
+</nav>
+
+<main id="main">
+
+<!-- ============================================================
+     OPENING — title sequence
+     ============================================================ -->
+<section class="opening" id="top" data-stop aria-labelledby="title">
+  <div class="wrap opening__top">
+    <img class="opening__logo" src="assets/brand/eui-logo.svg" width="267" height="99" alt="Egypt University of Informatics (EUI)">
+    <div class="opening__meta">
+      <p class="disclaimer">Student Academic Project — Not an official EUI webpage.</p>
+      <button class="btn-present btn-present--inline" type="button" data-present aria-pressed="false" title="Presentation mode (P)">
+        <span>Present</span><kbd>P</kbd>
+      </button>
+    </div>
+  </div>
+
+  <div class="wrap opening__center">
+    <p class="opening__course">Calculus I</p>
+    <h1 class="title" id="title" aria-label="Limits" data-title>
+      <span aria-hidden="true">L</span><span aria-hidden="true">I</span><span aria-hidden="true">M</span><span aria-hidden="true">I</span><span aria-hidden="true">T</span><span aria-hidden="true">S</span>
+    </h1>
+    <div class="motif" data-motif aria-hidden="true"></div>
+    <p class="opening__subtitle">Understanding what happens near a point — before we ever reach it.</p>
+  </div>
+
+  <div class="wrap">
+    <dl class="credits">
+      <div class="credits__item">
+        <dt>Student</dt>
+        <dd>Allam Ashraf Mohamed <span class="credits__id">23-101021</span></dd>
+      </div>
+      <div class="credits__item">
+        <dt>Instructor</dt>
+        <dd>Dr. Mahmoud Mokhtar</dd>
+      </div>
+      <div class="credits__item">
+        <dt>Teaching Assistant</dt>
+        <dd>Youssef Hamed</dd>
+      </div>
+      <div class="credits__item">
+        <dt>Faculty</dt>
+        <dd>Faculty of Computing and Information Sciences</dd>
+      </div>
+    </dl>
+  </div>
+  <a class="cue" href="#ch1" aria-label="Begin with Chapter 01"><span>Begin</span><svg viewBox="0 0 12 34" aria-hidden="true"><path d="M6 0v26"/><path d="M1.5 22 6 27l4.5-5"/></svg></a>
+</section>
+
+
+<!-- ============================================================
+     CHAPTER 01 — What is a limit?
+     ============================================================ -->
+<section class="chapter stop" id="ch1" data-stop data-chapter="01" data-name="What is a limit?" aria-labelledby="ch1-title">
+  <div class="wrap spread">
+    <div class="spread__text">
+      <header class="chead" data-reveal>
+        <p class="kicker"><span class="kicker__num">01</span><span class="kicker__stage">Intuition</span></p>
+        <h2 class="chead__title" id="ch1-title">What is a limit?</h2>
+      </header>
+
+      <div class="defn" data-reveal>
+        <span class="tex" data-display>\lim_{x \to a} f(x) = L</span>
+      </div>
+
+      <p class="lead" data-reveal>When <span class="tex">x</span> gets closer to <span class="tex">a</span>, <span class="tex">f(x)</span> gets closer to <span class="tex">L</span>.</p>
+
+      <p class="body" data-reveal>A limit describes a trend, not an arrival. Take <span class="tex">f(x) = x + 3</span> and move <span class="tex">x</span> toward <span class="tex">2</span>: the two distances close together.</p>
+
+      <div class="readouts" data-reveal>
+        <div class="readout">
+          <span class="readout__k"><i>x</i></span>
+          <output class="readout__v" data-out="x" aria-live="off">0.500</output>
+          <span class="readout__t">→ 2</span>
+        </div>
+        <div class="readout">
+          <span class="readout__k"><i>f</i>(<i>x</i>)</span>
+          <output class="readout__v" data-out="fx" aria-live="off">3.500</output>
+          <span class="readout__t">→ 5</span>
+        </div>
+        <p class="readouts__gap">
+          <span class="gapnote"><span class="tex">|x - 2|</span> = <output data-out="dx">1.500</output></span>
+          <span class="gapnote"><span class="tex">|f(x) - 5|</span> = <output data-out="dfx">1.500</output></span>
+        </p>
+      </div>
+      <p class="note" data-out="note" data-reveal>The closer <span class="tex">x</span> gets, the more digits it takes to see the difference.</p>
+    </div>
+
+    <figure class="spread__figure figure" data-reveal>
+      <div class="plot-frame">
+        <svg class="plot plot--ch1" data-plot role="img" aria-labelledby="ch1-ptitle">
+          <title id="ch1-ptitle">Graph of f(x) = x + 3. A point on the line can be moved toward x = 2, where the line passes through (2, 5).</title>
+        </svg>
+      </div>
+      <div class="axis-slider" data-axis-slider>
+        <label class="sr-only" for="ch1-x">Value of x</label>
+        <input id="ch1-x" class="range" type="range" min="-0.25" max="4.25" step="0.0001" value="0.5" data-x-input>
+      </div>
+      <div class="controls">
+        <button class="btn btn--approach" type="button" data-halve>
+          <svg class="ico-approach" viewBox="0 0 28 10" aria-hidden="true"><circle class="ico-approach__o" cx="14" cy="5" r="3.2"/><circle class="ico-approach__l" cx="3" cy="5" r="1.9"/><circle class="ico-approach__r" cx="25" cy="5" r="1.9"/></svg>
+          <span>Halve the distance to 2</span>
+        </button>
+        <button class="btn-text" type="button" data-reset>Reset</button>
+        <span class="hint">Drag across the graph, or use the slider.</span>
+      </div>
+    </figure>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CHAPTER 02 — The hole
+     ============================================================ -->
+<section class="chapter stop ch2" id="ch2" data-stop data-chapter="02" data-name="The hole" aria-labelledby="ch2-title">
+  <div class="wrap">
+    <div class="ch2__head">
+      <header class="chead" data-reveal>
+        <p class="kicker"><span class="kicker__num">02</span><span class="kicker__stage">Visualization</span></p>
+        <h2 class="chead__title" id="ch2-title">The hole</h2>
+        <p class="chead__lede">At <span class="tex">x = 1</span> this function has no value at all. Near <span class="tex">x = 1</span>, it knows exactly where it is heading.</p>
+      </header>
+      <div class="ch2__algebra" data-reveal>
+        <span class="tex only-wide" data-display>f(x) = \frac{x^2 - 1}{x - 1} = \frac{\cancel{(x-1)}\,(x+1)}{\cancel{(x-1)}} = x + 1, \qquad x \neq 1</span>
+        <span class="tex only-narrow" data-display>\begin{aligned} f(x) &amp;= \frac{x^2 - 1}{x - 1} = \frac{\cancel{(x-1)}\,(x+1)}{\cancel{(x-1)}} \\ &amp;= x + 1, \qquad x \neq 1 \end{aligned}</span>
+        <p class="aside"><span class="tex">f(1) = \tfrac{0}{0}</span> is undefined, so the graph has a hole at <span class="tex">(1,\,2)</span>.</p>
+      </div>
+    </div>
+
+    <div class="ch2__stage" data-reveal>
+      <aside class="side side--left" data-side="left" aria-label="Point approaching from the left">
+        <p class="side__k">From the left</p>
+        <p class="side__lim"><span class="tex">x \to 1^{-}</span></p>
+        <dl class="side__vals">
+          <div><dt><i>x</i></dt><dd data-out="lx">0.0000</dd></div>
+          <div><dt><i>f</i>(<i>x</i>)</dt><dd data-out="lfx">1.0000</dd></div>
+        </dl>
+        <p class="side__verdict">LEFT <span class="side__arrow">→ 2</span></p>
+      </aside>
+
+      <figure class="ch2__figure figure">
+        <div class="plot-frame">
+          <svg class="plot plot--ch2" data-plot role="img" aria-labelledby="ch2-ptitle">
+            <title id="ch2-ptitle">Graph of y = x + 1 with an open circle at (1, 2). One point approaches the hole from the left and one from the right.</title>
+          </svg>
+        </div>
+      </figure>
+
+      <aside class="side side--right" data-side="right" aria-label="Point approaching from the right">
+        <p class="side__k">From the right</p>
+        <p class="side__lim"><span class="tex">x \to 1^{+}</span></p>
+        <dl class="side__vals">
+          <div><dt><i>x</i></dt><dd data-out="rx">2.0000</dd></div>
+          <div><dt><i>f</i>(<i>x</i>)</dt><dd data-out="rfx">3.0000</dd></div>
+        </dl>
+        <p class="side__verdict">RIGHT <span class="side__arrow">→ 2</span></p>
+      </aside>
+    </div>
+
+    <div class="ch2__foot">
+      <div class="resolve" data-resolve>
+        <span class="resolve__q" aria-hidden="true"><span class="tex">\displaystyle\lim_{x \to 1} f(x) = \ ?</span></span>
+        <span class="resolve__part resolve__l"><span class="tex">\displaystyle\lim_{x \to 1^{-}} f(x) = 2</span></span>
+        <span class="resolve__part resolve__r"><span class="tex">\displaystyle\lim_{x \to 1^{+}} f(x) = 2</span></span>
+        <span class="resolve__final"><span class="resolve__therefore">therefore</span><span class="tex">\displaystyle\lim_{x \to 1} f(x) = 2</span></span>
+      </div>
+      <div class="controls controls--center">
+        <button class="btn btn--approach btn--primary" type="button" data-approach>
+          <svg class="ico-approach" viewBox="0 0 28 10" aria-hidden="true"><circle class="ico-approach__o" cx="14" cy="5" r="3.2"/><circle class="ico-approach__l" cx="3" cy="5" r="1.9"/><circle class="ico-approach__r" cx="25" cy="5" r="1.9"/></svg>
+          <span>Approach the limit</span>
+        </button>
+        <button class="btn-text" type="button" data-reset>Reset</button>
+      </div>
+      <p class="sr-only" aria-live="polite" data-ch2-live></p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CHAPTER 03 — Why limits matter
+     ============================================================ -->
+<section class="chapter ch3" id="ch3" data-chapter="03" data-name="Why limits matter" aria-labelledby="ch3-title">
+
+  <div class="stop" data-stop>
+    <div class="wrap">
+      <header class="chead chead--row" data-reveal>
+        <p class="kicker"><span class="kicker__num">03</span><span class="kicker__stage">Applications</span></p>
+        <h2 class="chead__title" id="ch3-title">Why limits matter</h2>
+        <p class="chead__lede">Three ideas at the heart of calculus. Each one is a limit in disguise.</p>
+      </header>
+
+      <article class="app spread" data-app="velocity" aria-labelledby="app1-title">
+        <div class="spread__text">
+          <p class="app__num">01</p>
+          <h3 class="app__title" id="app1-title">Instantaneous velocity</h3>
+          <p class="body">An object is at position <span class="tex">s(t) = t^2</span> metres after <span class="tex">t</span> seconds. Average velocity over an interval is easy. Velocity at one instant would be <span class="tex">\tfrac{0}{0}</span> — unless we take a limit.</p>
+
+          <dl class="mini-readouts">
+            <div><dt><span class="tex">\Delta t</span></dt><dd data-out="dt">2.0000</dd></div>
+            <div><dt><span class="tex">\Delta s</span></dt><dd data-out="ds">8.0000</dd></div>
+            <div class="is-key"><dt><span class="tex">\Delta s / \Delta t</span></dt><dd><output data-out="avg">4.0000</output> <span class="unit">m/s</span> <span class="readout__t">→ 2</span></dd></div>
+          </dl>
+
+          <div class="formula-pair" data-reveal-formula>
+            <p class="formula-pair__a"><span class="formula-pair__k">average velocity</span><span class="tex">\dfrac{s(t+h) - s(t)}{h}</span></p>
+            <p class="formula-pair__b"><span class="formula-pair__k">instantaneous velocity</span><span class="tex">\displaystyle v(t) = \lim_{h \to 0} \frac{s(t+h) - s(t)}{h}</span></p>
+            <p class="formula-pair__hint">Shrink <span class="tex">\Delta t</span> to reveal what the average becomes.</p>
+          </div>
+        </div>
+
+        <figure class="spread__figure figure">
+          <div class="plot-frame">
+            <svg class="plot plot--velocity" data-plot role="img" aria-labelledby="app1-ptitle">
+              <title id="app1-ptitle">Graph of s(t) = t squared with a secant line through t = 1 and t = 1 + Δt. As Δt shrinks, the secant becomes the tangent line with slope 2.</title>
+            </svg>
+          </div>
+          <div class="field">
+            <label class="field__label" for="dt-range"><span class="tex">\Delta t</span></label>
+            <input id="dt-range" class="range" type="range" min="0" max="1" step="0.001" value="1" data-dt-input>
+          </div>
+          <div class="controls">
+            <button class="btn btn--approach" type="button" data-shrink>
+              <svg class="ico-approach" viewBox="0 0 28 10" aria-hidden="true"><circle class="ico-approach__o" cx="14" cy="5" r="3.2"/><circle class="ico-approach__l" cx="3" cy="5" r="1.9"/><circle class="ico-approach__r" cx="25" cy="5" r="1.9"/></svg>
+              <span>Let Δt → 0</span>
+            </button>
+            <button class="btn-text" type="button" data-reset>Reset</button>
+          </div>
+        </figure>
+      </article>
+    </div>
+  </div>
+
+  <div class="stop" data-stop>
+    <div class="wrap">
+      <article class="app spread spread--flip" data-app="area" aria-labelledby="app2-title">
+        <div class="spread__text">
+          <p class="app__num">02</p>
+          <h3 class="app__title" id="app2-title">Area under a curve</h3>
+          <p class="body">Rectangles are easy to measure; curves are not. So we estimate the area under <span class="tex">f(x) = x^2</span> from <span class="tex">0</span> to <span class="tex">2</span> with <span class="tex">n</span> rectangles — then let <span class="tex">n</span> grow without bound. The teal slivers above the curve are the error.</p>
+
+          <div class="segmented" role="group" aria-label="Number of rectangles" data-n-group>
+            <button type="button" data-n="4" aria-pressed="true">4</button>
+            <button type="button" data-n="8" aria-pressed="false">8</button>
+            <button type="button" data-n="16" aria-pressed="false">16</button>
+            <button type="button" data-n="32" aria-pressed="false">32</button>
+            <button type="button" data-n="64" aria-pressed="false">64</button>
+            <button type="button" data-n="100" aria-pressed="false">100</button>
+            <span class="segmented__inf" aria-hidden="true"><span class="tex">n \to \infty</span></span>
+          </div>
+
+          <dl class="mini-readouts">
+            <div><dt>estimate <span class="tex">R_n</span></dt><dd data-out="rn">3.7500</dd></div>
+            <div><dt>exact area</dt><dd><span class="tex">\tfrac{8}{3}</span> ≈ 2.6667</dd></div>
+            <div class="is-key"><dt>error</dt><dd data-out="err">1.0833</dd></div>
+          </dl>
+
+          <div class="numberline" data-area-line aria-hidden="true"></div>
+
+          <p class="formula-line"><span class="tex">\displaystyle \text{Area} = \lim_{n \to \infty} \sum_{k=1}^{n} f(x_k)\,\Delta x</span> <span class="formula-line__aside"><span class="tex">\Delta x = \tfrac{2}{n},\ \ x_k = k\,\Delta x</span></span></p>
+        </div>
+
+        <figure class="spread__figure figure">
+          <div class="plot-frame">
+            <svg class="plot plot--area" data-plot role="img" aria-labelledby="app2-ptitle">
+              <title id="app2-ptitle">Graph of f(x) = x squared from 0 to 2 with rectangles under it. More rectangles make the estimate closer to the exact area 8/3.</title>
+            </svg>
+          </div>
+          <p class="figure__caption"><span class="swatch swatch--approach"></span>approximation <span class="swatch swatch--limit"></span>exact area</p>
+        </figure>
+      </article>
+    </div>
+  </div>
+
+  <div class="stop stop--compact" data-stop>
+    <div class="wrap">
+      <article class="app app--change" aria-labelledby="app3-title">
+        <div class="app--change__head">
+          <p class="app__num">03</p>
+          <h3 class="app__title" id="app3-title">Continuous change</h3>
+          <p class="body">Change that never jumps. Each of these settles toward a value it approaches but never quite reaches.</p>
+        </div>
+        <ul class="multiples" data-multiples>
+          <li class="multiple" data-kind="temperature">
+            <svg class="multiple__plot" role="img" aria-label="A cooling curve approaching room temperature"></svg>
+            <p class="multiple__k">Temperature</p>
+            <p class="multiple__t">Tea cools toward the room: <span class="tex">T(t) \to 22^\circ\mathrm{C}</span></p>
+          </li>
+          <li class="multiple" data-kind="motion">
+            <svg class="multiple__plot" role="img" aria-label="A damped oscillation settling to rest"></svg>
+            <p class="multiple__k">Motion</p>
+            <p class="multiple__t">A spring settles to rest: <span class="tex">x(t) \to 0</span></p>
+          </li>
+          <li class="multiple" data-kind="growth">
+            <svg class="multiple__plot" role="img" aria-label="A logistic growth curve approaching its capacity"></svg>
+            <p class="multiple__k">Growth</p>
+            <p class="multiple__t">A population nears its capacity: <span class="tex">P(t) \to K</span></p>
+          </li>
+          <li class="multiple" data-kind="signal">
+            <svg class="multiple__plot" role="img" aria-label="Samples of a wave becoming denser until they trace the continuous signal"></svg>
+            <p class="multiple__k">Signals</p>
+            <p class="multiple__t">Denser samples trace the wave: <span class="tex">\Delta t \to 0</span></p>
+          </li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CHAPTER 04 — Limits in computer science (dark)
+     ============================================================ -->
+<section class="chapter ch4 theme-dark" id="ch4" data-chapter="04" data-name="Computer science" aria-labelledby="ch4-title">
+
+  <div class="stop" data-stop>
+    <div class="wrap">
+      <header class="chead chead--row" data-reveal>
+        <p class="kicker"><span class="kicker__num">04</span><span class="kicker__stage">Computer Science</span></p>
+        <h2 class="chead__title" id="ch4-title">Limits in computer science</h2>
+        <p class="chead__lede">In computing, the limit that matters most is <span class="tex">n \to \infty</span>: what happens as the input grows without bound.</p>
+      </header>
+
+      <article class="cs-algo" aria-labelledby="algo-title">
+        <div class="cs-algo__text">
+          <p class="label">Algorithm analysis</p>
+          <h3 class="cs-title" id="algo-title"><span class="tex">n\log_2 n</span> <span class="vs">versus</span> <span class="tex">n^2</span></h3>
+          <p class="body">Merge sort makes on the order of <span class="tex">n\log_2 n</span> comparisons. Comparing every pair of items takes on the order of <span class="tex">n^2</span>. The square is <span class="tex">n^2</span>; the teal strip inside it is <span class="tex">n\log_2 n</span>.</p>
+
+          <div class="field field--dark">
+            <label class="field__label" for="n-range"><span class="tex">n</span></label>
+            <input id="n-range" class="range" type="range" min="1" max="20" step="1" value="3" data-n-input aria-describedby="n-help">
+            <span class="sr-only" id="n-help">n doubles at every step, from 2 to 1,048,576</span>
+          </div>
+
+          <table class="cs-table">
+            <tbody>
+              <tr><th scope="row"><span class="tex">n</span></th><td data-out="n">8</td></tr>
+              <tr><th scope="row"><span class="tex">n\log_2 n</span></th><td data-out="nlogn">24</td></tr>
+              <tr><th scope="row"><span class="tex">n^2</span></th><td data-out="n2">64</td></tr>
+              <tr class="is-key"><th scope="row"><span class="tex">\dfrac{n\log_2 n}{n^2}</span></th><td data-out="ratio">0.375000</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cs-algo__viz">
+          <svg class="square" data-square role="img" aria-labelledby="sq-title"><title id="sq-title">A square representing n squared operations, with a strip inside representing n log n operations. The strip becomes a thinner and thinner fraction of the square as n grows.</title></svg>
+          <svg class="ratio-plot" data-ratio role="img" aria-labelledby="rp-title"><title id="rp-title">The ratio n log n over n squared plotted against n. It falls toward 0.</title></svg>
+        </div>
+
+        <div class="cs-algo__claim">
+          <p class="cs-formula"><span class="tex" data-display>\lim_{n \to \infty} \frac{n \log n}{n^2} \;=\; \lim_{n \to \infty} \frac{\log n}{n} \;=\; 0</span></p>
+          <p class="body body--small">A limit of <span class="tex">0</span> means <span class="tex">n\log n</span> grows strictly slower than <span class="tex">n^2</span>: in asymptotic notation <span class="tex">n\log n = o(n^2)</span>, and therefore also <span class="tex">O(n^2)</span>. Big-O itself is defined by an inequality — <span class="tex">f(n) \le c\,g(n)</span> for all <span class="tex">n \ge n_0</span> — not by a limit. The limit is a tool for <em>comparing</em> growth rates.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="stop" data-stop>
+    <div class="wrap cs-pair">
+      <article class="cs-card" aria-labelledby="num-title">
+        <p class="label">Numerical methods</p>
+        <h3 class="cs-title" id="num-title">Approximations that converge</h3>
+        <p class="body body--small">Many algorithms cannot jump to an answer. They produce better and better approximations. Here <span class="tex">x_{k+1} = \tfrac{1}{2}(x_k + 2)</span>, starting from <span class="tex">x_1 = 3</span>: every step halves the distance to <span class="tex">2</span>.</p>
+        <div class="seq" data-seq>
+          <svg class="seq__line" data-seq-line role="img" aria-label="Points of the sequence 3, 2.5, 2.25, 2.125 and so on, hopping toward 2 on a number line"></svg>
+          <ol class="seq__list" data-seq-list aria-label="Terms of the sequence"></ol>
+        </div>
+        <div class="cs-card__foot">
+          <p class="tex-line"><span class="tex">|x_k - 2| = \dfrac{1}{2^{\,k-1}} \;\longrightarrow\; 0</span></p>
+          <button class="btn-text btn-text--dark" type="button" data-seq-replay>Replay</button>
+        </div>
+      </article>
+
+      <article class="cs-card" aria-labelledby="ml-title">
+        <p class="label">Machine learning</p>
+        <h3 class="cs-title" id="ml-title">Training is a limit question</h3>
+        <p class="body body--small">Optimization algorithms repeatedly update parameters, <span class="tex">w_{k+1} = w_k - \eta\,L'(w_k),</span> lowering the loss a little each time. We study whether — and how fast — the process converges.</p>
+        <div class="ml" data-ml>
+          <svg class="ml__plot" data-ml-plot role="img" aria-label="A loss curve with training iterations moving down toward the minimum"></svg>
+          <svg class="ml__spark" data-ml-spark role="img" aria-label="Loss plotted against iteration, falling toward the minimum loss"></svg>
+        </div>
+        <div class="cs-card__foot">
+          <p class="ml__status"><span class="label label--inline">Iteration</span> <output data-out="iter">0</output> <span class="label label--inline">Loss</span> <output data-out="loss">4.0880</output></p>
+          <button class="btn-text btn-text--dark" type="button" data-ml-replay>Replay</button>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="stop stop--compact" data-stop>
+    <div class="wrap">
+      <article class="cs-graphics" aria-labelledby="gfx-title">
+        <div class="cs-graphics__viz">
+          <svg class="mesh" data-mesh role="img" aria-label="A surface drawn as a mesh that becomes finer until it looks smooth"></svg>
+        </div>
+        <div class="cs-graphics__text">
+          <p class="label">Computer graphics</p>
+          <h3 class="cs-title" id="gfx-title">Smoothness, one refinement at a time</h3>
+          <p class="body body--small">A surface on screen is a mesh of flat pieces. As the pieces shrink, the mesh approaches the true surface. Smooth curves, animation, physical simulation and 3D surfaces all rely on derivatives and integrals — and both are built from limits.</p>
+          <p class="mesh__status"><span class="label label--inline">Mesh</span> <output data-out="mesh">3 × 3</output> <span class="mesh__arrow">→ smooth</span></p>
+          <button class="btn-text btn-text--dark" type="button" data-mesh-replay>Replay</button>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CHAPTER 05 — Limit laws
+     ============================================================ -->
+<section class="chapter stop ch5" id="ch5" data-stop data-chapter="05" data-name="Limit laws" aria-labelledby="ch5-title">
+  <div class="wrap spread spread--laws">
+    <div class="spread__text">
+      <header class="chead" data-reveal>
+        <p class="kicker"><span class="kicker__num">05</span><span class="kicker__stage">Theorems</span></p>
+        <h2 class="chead__title" id="ch5-title">The limit laws</h2>
+      </header>
+      <p class="body" data-reveal>Suppose <span class="tex">\lim_{x\to a} f(x) = L</span> and <span class="tex">\lim_{x\to a} g(x) = M</span>. Then limits respect arithmetic — every limit below is taken as <span class="tex">x \to a</span>.</p>
+
+      <ol class="laws" data-laws>
+        <li class="law" data-law="1"><span class="law__n">I</span><span class="law__name">Constant</span><span class="law__f"><span class="tex">\lim c = c</span></span></li>
+        <li class="law" data-law="2"><span class="law__n">II</span><span class="law__name">Constant multiple</span><span class="law__f"><span class="tex">\lim\, c\,f(x) = c\,L</span></span></li>
+        <li class="law" data-law="3"><span class="law__n">III</span><span class="law__name">Sum</span><span class="law__f"><span class="tex">\lim\, [f(x) + g(x)] = L + M</span></span></li>
+        <li class="law" data-law="4"><span class="law__n">IV</span><span class="law__name">Difference</span><span class="law__f"><span class="tex">\lim\, [f(x) - g(x)] = L - M</span></span></li>
+        <li class="law" data-law="5"><span class="law__n">V</span><span class="law__name">Product</span><span class="law__f"><span class="tex">\lim\, f(x)\,g(x) = L\,M</span></span></li>
+        <li class="law" data-law="6"><span class="law__n">VI</span><span class="law__name">Quotient</span><span class="law__f"><span class="tex">\lim \dfrac{f(x)}{g(x)} = \dfrac{L}{M}, \ \ M \neq 0</span></span></li>
+        <li class="law" data-law="7"><span class="law__n">VII</span><span class="law__name">Power</span><span class="law__f"><span class="tex">\lim\, [f(x)]^{n} = L^{n}, \ \ n \in \mathbb{Z}^{+}</span></span></li>
+      </ol>
+    </div>
+
+    <div class="spread__figure">
+      <div class="worked" data-stepper data-stepper-name="worked" tabindex="0" role="group" aria-labelledby="worked-title" aria-describedby="worked-help">
+        <p class="label" id="worked-title">Worked example</p>
+        <p class="sr-only" id="worked-help">Use the Next step button or the right arrow key to reveal each step.</p>
+        <div class="worked__start"><span class="tex" data-display>\lim_{x \to 2}\, \bigl(3x^2 + 2x - 1\bigr)</span></div>
+        <ol class="worked__steps">
+          <li class="wstep" data-step data-uses="3,4">
+            <p class="wstep__k"><span class="wstep__n">Step 1</span><span class="wstep__what">Sum and Difference laws <span class="wstep__laws">III · IV</span></span></p>
+            <p class="wstep__m"><span class="tex">= \lim_{x\to2} 3x^2 \;+\; \lim_{x\to2} 2x \;-\; \lim_{x\to2} 1</span></p>
+          </li>
+          <li class="wstep" data-step data-uses="2,7,1">
+            <p class="wstep__k"><span class="wstep__n">Step 2</span><span class="wstep__what">Constant multiple, Power and Constant laws <span class="wstep__laws">II · VII · I</span></span></p>
+            <p class="wstep__m"><span class="tex">= 3\Bigl(\lim_{x\to2} x\Bigr)^{2} \;+\; 2\lim_{x\to2} x \;-\; 1</span></p>
+          </li>
+          <li class="wstep" data-step data-uses="">
+            <p class="wstep__k"><span class="wstep__n">Step 3</span><span class="wstep__what">Substitute <span class="tex">\lim_{x\to2} x = 2</span></span></p>
+            <p class="wstep__m"><span class="tex">= 3(2)^{2} + 2(2) - 1 \;=\; 12 + 4 - 1</span></p>
+          </li>
+          <li class="wstep wstep--final" data-step data-uses="">
+            <p class="wstep__k"><span class="wstep__n">Result</span></p>
+            <p class="wstep__m"><span class="tex">= 15</span></p>
+          </li>
+        </ol>
+        <div class="stepper-controls">
+          <button class="btn-text" type="button" data-prev disabled>← Previous</button>
+          <p class="stepper-count" aria-live="polite" data-count>0 / 4</p>
+          <button class="btn btn--small" type="button" data-next>Next step →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CHAPTER 06 — Advanced / optional (deep layer)
+     ============================================================ -->
+<section class="chapter ch6 theme-deep" id="ch6" data-chapter="06" data-name="Advanced" aria-labelledby="ch6-title">
+  <div class="descent" aria-hidden="true"></div>
+
+  <div class="stop stop--eps" data-stop>
+    <div class="threshold" aria-hidden="true">
+      <span class="threshold__line"></span>
+      <span class="threshold__label">Advanced / Optional</span>
+      <span class="threshold__line"></span>
+    </div>
+    <div class="wrap spread spread--eps">
+      <div class="spread__text">
+        <header class="chead" data-reveal>
+          <p class="kicker"><span class="kicker__num">06</span><span class="kicker__stage">Advanced <span class="optional-tag">Optional</span></span></p>
+          <h2 class="chead__title" id="ch6-title">Epsilon and delta</h2>
+          <p class="chead__lede">“Closer” made precise. Someone challenges you with a tolerance <span class="tex">\htmlClass{c-eps}{\varepsilon}</span>; you must answer with a <span class="tex">\htmlClass{c-del}{\delta}</span>.</p>
+        </header>
+
+        <p class="body body--small" data-reveal>For <span class="tex">f(x) = 2x + 1</span>, <span class="tex">a = 2</span> and <span class="tex">L = 5</span>: <span class="tex">|f(x) - 5| = |2x - 4| = 2\,|x - 2|</span>. So whenever <span class="tex">|x - 2| &lt; \htmlClass{c-eps}{\varepsilon}/2</span>, we get <span class="tex">|f(x) - 5| &lt; \htmlClass{c-eps}{\varepsilon}</span>. The answer is <span class="tex">\htmlClass{c-del}{\delta} = \htmlClass{c-eps}{\varepsilon}/2</span>.</p>
+
+        <div class="eps-controls">
+          <div class="field field--dark field--eps">
+            <label class="field__label" for="eps-range"><span class="tex">\htmlClass{c-eps}{\varepsilon}</span></label>
+            <input id="eps-range" class="range range--eps" type="range" min="0.1" max="2" step="0.01" value="1" data-eps-input>
+            <output class="field__value" data-out="eps">1.00</output>
+          </div>
+          <div class="field field--dark field--del">
+            <label class="field__label" for="del-range"><span class="tex">\htmlClass{c-del}{\delta}</span></label>
+            <input id="del-range" class="range range--del" type="range" min="0.02" max="1.5" step="0.01" value="0.5" data-del-input disabled>
+            <output class="field__value" data-out="del">0.50</output>
+          </div>
+          <label class="toggle"><input type="checkbox" data-auto-delta checked> <span>Compute <span class="tex">\htmlClass{c-del}{\delta} = \htmlClass{c-eps}{\varepsilon}/2</span> for me</span></label>
+        </div>
+
+        <div class="eps-check" data-eps-check aria-live="polite">
+          <p class="eps-check__row" data-row="x"><span class="tex">|x - a|</span> = <output data-out="px">0.300</output> <span class="eps-check__cmp" data-cmp="x"></span></p>
+          <p class="eps-check__row" data-row="y"><span class="tex">|f(x) - L|</span> = <output data-out="py">0.600</output> <span class="eps-check__cmp" data-cmp="y"></span></p>
+          <p class="eps-check__verdict" data-verdict></p>
+        </div>
+      </div>
+
+      <figure class="spread__figure figure">
+        <div class="plot-frame">
+          <svg class="plot plot--eps" data-plot role="img" aria-labelledby="eps-ptitle">
+            <title id="eps-ptitle">Graph of f(x) = 2x + 1 with a horizontal band of half-width epsilon around y = 5 and a vertical band of half-width delta around x = 2. A probe point can be dragged along the line.</title>
+          </svg>
+        </div>
+        <p class="figure__caption">Drag the white probe along the line. Inside the <span class="c-del-text">δ-band</span>, does the graph stay inside the <span class="c-eps-text">ε-band</span>?</p>
+      </figure>
+    </div>
+
+  </div>
+
+  <div class="stop stop--compact stop--definition" data-stop>
+    <div class="wrap">
+      <div class="definition" data-reveal>
+        <p class="label definition__label">The precise definition of <span class="tex">\lim_{x\to a} f(x) = L</span></p>
+        <p class="definition__words">For every <span class="tex">\htmlClass{c-eps}{\varepsilon} &gt; 0</span> there exists <span class="tex">\htmlClass{c-del}{\delta} &gt; 0</span> such that</p>
+        <p class="definition__math"><span class="tex" data-display>0 &lt; |x - a| &lt; \htmlClass{c-del}{\delta} \quad\Longrightarrow\quad |f(x) - L| &lt; \htmlClass{c-eps}{\varepsilon}</span></p>
+        <p class="definition__note">The condition <span class="tex">0 &lt; |x - a|</span> leaves out <span class="tex">x = a</span> itself: the definition never looks at <span class="tex">f(a)</span>. That is exactly why the hole in Chapter 02 did not matter.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop" data-stop>
+    <div class="wrap spread spread--proof">
+      <div class="spread__text">
+        <p class="label">Optional proof</p>
+        <h3 class="proof-title">The Sum Law</h3>
+        <p class="body body--small">If <span class="tex">\lim_{x\to a} f(x) = L</span> and <span class="tex">\lim_{x\to a} g(x) = M</span>, then</p>
+        <p class="theorem"><span class="tex" data-display>\lim_{x \to a}\,\bigl[f(x) + g(x)\bigr] = L + M</span></p>
+        <p class="body body--small">The key tool is the triangle inequality, <span class="tex">|u + v| \le |u| + |v|</span>: two small errors add up to at most their sum.</p>
+      </div>
+
+      <div class="spread__figure">
+        <div class="proof" data-stepper data-stepper-name="proof" tabindex="0" role="group" aria-labelledby="proof-label" aria-describedby="proof-help">
+          <p class="label" id="proof-label">Proof — let <span class="tex">\htmlClass{c-eps}{\varepsilon} &gt; 0</span></p>
+          <p class="sr-only" id="proof-help">Use the Next step button or the right arrow key to reveal each step.</p>
+          <ol class="proof__steps">
+            <li class="pstep" data-step>
+              <p class="pstep__k">Use each limit with <span class="tex">\htmlClass{c-eps}{\varepsilon}/2</span></p>
+              <p class="pstep__m">There is a <span class="tex">\delta_1 &gt; 0</span> with <span class="tex">0 &lt; |x-a| &lt; \delta_1 \Rightarrow |f(x) - L| &lt; \tfrac{\varepsilon}{2}</span>, and a <span class="tex">\delta_2 &gt; 0</span> with <span class="tex">0 &lt; |x-a| &lt; \delta_2 \Rightarrow |g(x) - M| &lt; \tfrac{\varepsilon}{2}</span>.</p>
+            </li>
+            <li class="pstep" data-step>
+              <p class="pstep__k">Take the smaller distance</p>
+              <p class="pstep__m">Let <span class="tex">\htmlClass{c-del}{\delta} = \min(\delta_1, \delta_2)</span>. If <span class="tex">0 &lt; |x - a| &lt; \htmlClass{c-del}{\delta}</span>, both inequalities hold at once.</p>
+            </li>
+            <li class="pstep" data-step>
+              <p class="pstep__k">Regroup the error</p>
+              <p class="pstep__m"><span class="tex">\bigl|(f(x) + g(x)) - (L + M)\bigr| = \bigl|(f(x) - L) + (g(x) - M)\bigr|</span></p>
+            </li>
+            <li class="pstep" data-step>
+              <p class="pstep__k">Triangle inequality</p>
+              <p class="pstep__m"><span class="tex">\le |f(x) - L| + |g(x) - M| \;&lt;\; \tfrac{\varepsilon}{2} + \tfrac{\varepsilon}{2} \;=\; \htmlClass{c-eps}{\varepsilon}</span></p>
+            </li>
+            <li class="pstep pstep--final" data-step>
+              <p class="pstep__k">Conclusion</p>
+              <p class="pstep__m">Every <span class="tex">\htmlClass{c-eps}{\varepsilon} &gt; 0</span> has a matching <span class="tex">\htmlClass{c-del}{\delta} &gt; 0</span>, so <span class="tex">\lim_{x\to a}[f(x) + g(x)] = L + M</span>. <span class="qed" aria-label="End of proof">∎</span></p>
+            </li>
+          </ol>
+          <div class="stepper-controls">
+            <button class="btn-text btn-text--dark" type="button" data-prev disabled>← Previous</button>
+            <p class="stepper-count" aria-live="polite" data-count>0 / 5</p>
+            <button class="btn btn--small btn--dark" type="button" data-next>Next step →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+
+<!-- ============================================================
+     ENDING
+     ============================================================ -->
+<footer class="ending theme-dark" id="end" data-stop data-name="Ending" aria-label="Closing">
+  <div class="wrap ending__inner">
+    <div class="motif motif--end" data-motif="end" aria-hidden="true"></div>
+    <blockquote class="ending__quote" data-quote>
+      <p><span class="ending__line ending__line--1">A limit does not ask where a function is.</span>
+      <span class="ending__line ending__line--2">It asks where the function is heading.</span></p>
+    </blockquote>
+
+    <div class="ending__credits">
+      <p class="ending__name">Allam Ashraf Mohamed <span class="ending__id">23-101021</span></p>
+      <p class="ending__course">Calculus I</p>
+      <p class="ending__staff"><span>Dr. Mahmoud Mokhtar</span><span class="dot" aria-hidden="true">·</span><span>Youssef Hamed</span></p>
+    </div>
+
+    <img class="ending__logo" src="assets/brand/eui-logo-white.svg" width="267" height="99" alt="Egypt University of Informatics (EUI)">
+
+    <p class="ending__small">
+      <button class="link-refs" type="button" data-open-refs aria-haspopup="dialog">References</button>
+      <span class="dot" aria-hidden="true">·</span>
+      <span>Student Academic Project — Not an official EUI webpage.</span>
+    </p>
+  </div>
+</footer>
+
+
+<!-- References -->
+<dialog class="refs" id="references" aria-labelledby="refs-title">
+  <div class="refs__inner">
+    <div class="refs__head">
+      <h2 class="refs__title" id="refs-title">References</h2>
+      <button class="refs__close" type="button" data-close-refs aria-label="Close references">Close</button>
+    </div>
+    <ol class="refs__list">
+      <li>Strang, G., &amp; Herman, E. (2016). <cite>Calculus Volume 1</cite>. OpenStax, Rice University. Chapter 2: Limits (§2.1–2.5). <span class="refs__url">openstax.org/details/books/calculus-volume-1</span></li>
+      <li>Stewart, J. (2015). <cite>Calculus: Early Transcendentals</cite> (8th ed.). Cengage Learning. Chapter 2: Limits and Derivatives.</li>
+      <li>Cormen, T. H., Leiserson, C. E., Rivest, R. L., &amp; Stein, C. (2009). <cite>Introduction to Algorithms</cite> (3rd ed.). MIT Press. Chapter 3: Growth of Functions — asymptotic notation and comparing growth rates.</li>
+      <li>Goodfellow, I., Bengio, Y., &amp; Courville, A. (2016). <cite>Deep Learning</cite>. MIT Press. Chapter 4: Numerical Computation (§4.3, Gradient-Based Optimization). <span class="refs__url">deeplearningbook.org</span></li>
+    </ol>
+    <div class="refs__colophon">
+      <p class="label">Colophon</p>
+      <p>Built with HTML, CSS, SVG and plain JavaScript; mathematics typeset with KaTeX. Set in Newsreader, Libre Franklin (the typeface of the EUI website) and IBM Plex Mono. Colours follow the EUI logo: navy, blue, teal and gold.</p>
+      <p>Every animation on this page is an exponential approach, <span class="tex">x(t) = L + (x_0 - L)\,e^{-t/\tau}</span>: the remaining distance shrinks by the same fraction every moment, so it tends to <span class="tex">0</span>. Teal always marks the approximation; gold always marks the limit.</p>
+      <p class="refs__disclaimer">Student Academic Project — Not an official EUI webpage. The EUI name and logo belong to Egypt University of Informatics and are used here only to identify the course.</p>
+    </div>
+  </div>
+</dialog>
+
+<div class="hud" data-hud aria-hidden="true">
+  <span class="hud__count" data-hud-count></span>
+  <span class="hud__keys">↑ ↓ move · Esc exit</span>
+</div>
+
+</body>
+</html>

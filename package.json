@@ -1,0 +1,12 @@
+{
+  "name": "calculus-i-limits",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Limits — an interactive exhibit for Calculus I (EUI). Student academic project, not an official EUI webpage.",
+  "author": "Allam Ashraf Mohamed (23-101021)",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test \"tests/*.test.mjs\"",
+    "validate:gestures": "node tests/validate-gestures.mjs"
+  }
+}

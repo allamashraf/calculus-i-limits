@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gesture Lab — Phase 0 · Limits exhibit</title>
+<meta name="description" content="Phase 0 feasibility lab: measures what this camera can reliably track for hands-free presentation control.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="css/gesture-lab.css">
+<script type="module" src="js/gesture/lab.mjs"></script>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar__title">
+    <p class="bar__kicker">Phase 0 · Camera feasibility</p>
+    <h1>Gesture Lab</h1>
+  </div>
+  <p class="bar__note">Measures what <em>this</em> camera can reliably track. Everything runs in this browser — no video is recorded or sent anywhere.</p>
+  <a class="bar__back" href="index.html">← Back to the exhibit</a>
+</header>
+
+<p class="notice" id="notice" role="alert" hidden></p>
+
+<main class="lab">
+  <section class="stage" aria-label="Camera">
+    <div class="stage__video" id="stageVideo">
+      <video id="video" playsinline muted></video>
+      <canvas id="overlay" aria-hidden="true"></canvas>
+      <div class="stage__empty" id="stageEmpty">
+        <p class="stage__lead">Camera is off</p>
+        <button class="btn btn--primary" id="startBtn" type="button">Start camera</button>
+        <p class="small">Chrome or Edge will ask for camera permission.</p>
+      </div>
+    </div>
+    <div class="setup">
+      <label class="field"><span>Camera</span><select id="camSelect"><option value="">Default camera</option></select></label>
+      <label class="field"><span>Resolution</span>
+        <select id="resSelect">
+          <option value="640x480">640 × 480</option>
+          <option value="1280x720" selected>1280 × 720</option>
+          <option value="1920x1080">1920 × 1080</option>
+        </select>
+      </label>
+      <label class="field"><span>Hand input</span>
+        <select id="modeSelect">
+          <option value="auto" selected>Auto — zoom around you</option>
+          <option value="full">Full frame</option>
+        </select>
+      </label>
+      <label class="field"><span>Pose rate (background)</span>
+        <select id="poseSelect">
+          <option value="500">2 per second</option>
+          <option value="200" selected>5 per second</option>
+          <option value="100">10 per second</option>
+        </select>
+      </label>
+      <button class="btn btn--quiet" id="stopBtn" type="button" disabled>Stop camera</button>
+    </div>
+    <p class="engine" id="engineStatus">Engine: not loaded</p>
+  </section>
+
+  <aside class="live" aria-label="Live measurements">
+    <div class="live__head">
+      <div class="tier" id="tierBox">
+        <span class="label">Range tier</span>
+        <strong class="tier__value" id="tier">—</strong>
+        <span class="tier__why" id="tierWhy">Start the camera</span>
+      </div>
+      <div class="now">
+        <span class="label">Gesture now</span>
+        <strong class="now__value" id="shapeNow">—</strong>
+        <span class="tier__why" id="shapeRaw">&nbsp;</span>
+      </div>
+    </div>
+
+    <dl class="metrics">
+      <div><dt>Camera</dt><dd><b data-m="camFps">—</b> fps <span data-m="camRes" class="dim"></span></dd></div>
+      <div><dt>Hand tracking</dt><dd><b data-m="handFps">—</b> fps <span class="dim">· <span data-m="handMs">—</span> ms</span></dd></div>
+      <div><dt>Pose tracking</dt><dd><b data-m="poseFps">—</b> fps <span class="dim">· <span data-m="poseMs">—</span> ms</span></dd></div>
+      <div><dt data-m="latKind">Latency</dt><dd><b data-m="latency">—</b> ms <span class="dim">p95 <span data-m="latency95">—</span></span></dd></div>
+      <div><dt>Hand detected</dt><dd><b data-m="detRate">—</b> <span class="dim">of last 2 s · <span data-m="hands">0</span> hand(s)</span></dd></div>
+      <div><dt>Confidence</dt><dd><b data-m="conf">—</b></dd></div>
+      <div><dt>Palm width</dt><dd><b data-m="palm">—</b> px <span class="dim">hand <span data-m="handLen">—</span> px</span></dd></div>
+      <div><dt>Shoulder width</dt><dd><b data-m="shoulder">—</b> px</dd></div>
+      <div><dt>Landmark stability</dt><dd><b data-m="noise">—</b> <span class="dim">frame-to-frame motion, % of palm</span></dd></div>
+      <div><dt>Pointer noise</dt><dd><b data-m="jitRaw">—</b> → <b data-m="jitFilt">—</b> px <span class="dim">fast wobble, raw → filtered (1920-px screen, hold still)</span></dd></div>
+      <div><dt>Pointer sway</dt><dd><b data-m="sway">—</b> px <span class="dim">slow arm movement — not removable by smoothing</span></dd></div>
+      <div><dt>Hand input</dt><dd><b data-m="input">—</b></dd></div>
+    </dl>
+
+    <ul class="chips" id="chips" aria-label="Gesture recognition"></ul>
+
+    <section class="diag" aria-label="Classifier diagnostics">
+      <div class="diag__head">
+        <span class="label">Classifier — live features</span>
+        <span class="diag__shape" id="diagShape">—</span>
+      </div>
+      <table class="diag__fingers">
+        <thead><tr><th>Finger</th><th title="|knuckle→tip| / bone length; 1 = straight">Straight</th><th title="|wrist→tip| / |wrist→knuckle|; ~2 extended, ~1 curled">Reach</th><th>PIP°</th><th>DIP°</th><th>State</th></tr></thead>
+        <tbody id="diagFingers"><tr><td colspan="6" class="dim">No hand in view</td></tr></tbody>
+      </table>
+      <dl class="diag__misc" id="diagMisc"></dl>
+      <ul class="diag__shapes" id="diagShapes"></ul>
+    </section>
+  </aside>
+</main>
+
+<section class="tests" aria-labelledby="tests-title">
+  <div class="tests__intro">
+    <h2 id="tests-title">Distance tests</h2>
+    <p>For each distance: choose it, press <b>Record test</b>, walk to the mark during the countdown, then follow the voice: <b>Open palm → Fist → Point → Pinch</b>, 5 seconds each (20 s in total): 1.5 s to change your hand (not scored), then 3.5 s held still (scored). Use your presenting hand only, at shoulder height, facing the camera.</p>
+  </div>
+
+  <div class="tests__controls">
+    <fieldset class="dist" id="distGroup">
+      <legend class="label">Distance</legend>
+      <label><input type="radio" name="dist" value="1" checked><span>1 m</span></label>
+      <label><input type="radio" name="dist" value="2"><span>2 m</span></label>
+      <label><input type="radio" name="dist" value="3"><span>3 m</span></label>
+      <label><input type="radio" name="dist" value="4"><span>4 m</span></label>
+    </fieldset>
+    <label class="field"><span>Countdown</span>
+      <select id="countSelect">
+        <option value="5">5 s</option>
+        <option value="10" selected>10 s</option>
+        <option value="15">15 s</option>
+      </select>
+    </label>
+    <label class="check"><input type="checkbox" id="voiceChk" checked> Voice prompts</label>
+    <label class="check"><input type="checkbox" id="lmChk" checked> Include raw landmarks in the report</label>
+    <label class="check"><input type="checkbox" id="debugChk" checked> Debug timeline</label>
+    <label class="check"><input type="checkbox" id="autoSaveChk" checked> Save report automatically</label>
+    <button class="btn btn--primary btn--big" id="recordBtn" type="button" disabled>Record test</button>
+  </div>
+
+  <div class="tiers-edit">
+    <span class="label">Live tier thresholds (palm width)</span>
+    <label>NEAR ≥ <input type="number" id="nearIn" min="4" max="200" step="1"> px</label>
+    <label>FAR ≥ <input type="number" id="farIn" min="2" max="200" step="1"> px</label>
+    <span class="dim" id="tierSource"></span>
+  </div>
+  <div class="tiers-edit">
+    <span class="label">Classifier thresholds</span>
+    <code class="th-code" id="thCode"></code>
+    <button class="btn btn--quiet" id="thReset" type="button">Reset to defaults</button>
+  </div>
+
+  <div class="table-wrap">
+    <table class="results" id="results">
+      <thead>
+        <tr>
+          <th>Distance</th><th>Detected</th><th>Confidence</th><th>Palm / hand</th><th>Shoulder</th>
+          <th>Cam / hand / pose fps</th><th>Latency</th><th>Jitter</th>
+          <th>Open</th><th>Fist</th><th>Point</th><th>Pinch</th><th>Tier</th><th></th>
+        </tr>
+      </thead>
+      <tbody id="resultsBody">
+        <tr class="empty"><td colspan="14">No tests recorded yet.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="recs" id="recs"></div>
+
+  <div class="tests__export">
+    <button class="btn" id="copyBtn" type="button" disabled>Copy summary</button>
+    <button class="btn" id="downloadBtn" type="button" disabled>Download report (JSON)</button>
+    <button class="btn btn--quiet" id="clearBtn" type="button" disabled>Clear results</button>
+    <span class="dim" id="exportMsg" aria-live="polite"></span>
+  </div>
+</section>
+
+<!-- Full-screen prompt during a test: readable from 4 m -->
+<div class="rec" id="rec" hidden role="dialog" aria-modal="true" aria-labelledby="recBig">
+  <p class="rec__dist" id="recDist">Test at 1 m</p>
+  <p class="rec__big" id="recBig">10</p>
+  <p class="rec__sub" id="recSub">Walk to the mark and face the camera</p>
+  <div class="rec__bar"><span id="recBar"></span></div>
+  <ol class="rec__segs" id="recSegs">
+    <li data-seg="OPEN">Open palm</li><li data-seg="FIST">Fist</li><li data-seg="POINT">Point</li><li data-seg="PINCH">Pinch</li>
+  </ol>
+  <p class="rec__debug" id="recDebug"></p>
+  <canvas class="rec__timeline" id="recTimeline" aria-hidden="true"></canvas>
+  <div class="rec__live">
+    <span id="recDet">Hand: —</span>
+    <span id="recPalm">Palm: — px</span>
+    <span id="recShape">Seen: —</span>
+  </div>
+  <canvas class="rec__preview" id="recPreview" width="384" height="216" aria-hidden="true"></canvas>
+  <button class="btn" id="recCancel" type="button">Cancel (Esc)</button>
+</div>
+
+</body>
+</html>
